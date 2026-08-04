@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YuZhou · 个人主页</title>
+<style>
+  :root {
+    --bg: #FBFAF8;
+    --surface: #FFFFFF;
+    --ink: #1B1B1F;
+    --muted: #6B6B73;
+    --faint: #9A9AA2;
+    --accent: #2F6BED;
+    --hairline: #E8E6E1;
+    --radius: 16px;
+    --maxw: 760px;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Songti SC", Georgia, serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.7;
+    font-size: 16px;
+    padding: 0 24px;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; }
+
+  /* 顶部细栏 */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 0 0;
+  }
+  .monogram {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--ink);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    font-family: var(--font-display);
+    font-size: 19px; font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  header a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    transition: color .2s ease;
+  }
+  header a:hover { color: var(--ink); }
+
+  /* 主视觉 */
+  .hero { padding: 96px 0 72px; }
+  .eyebrow {
+    font-size: 12.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 600;
+    margin-bottom: 22px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(44px, 9vw, 72px);
+    line-height: 1.04;
+    letter-spacing: -0.5px;
+    margin-bottom: 26px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .lede {
+    font-size: clamp(17px, 2.6vw, 20px);
+    color: var(--muted);
+    max-width: 38ch;
+    font-weight: 400;
+  }
+
+  /* 区块通用 */
+  section { padding: 56px 0; border-top: 1px solid var(--hairline); }
+  .section-label {
+    font-size: 12.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
+  /* 贪吃蛇卡片 */
+  .snake-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 26px;
+    display: grid; place-items: center;
+  }
+  .snake-card img { max-width: 100%; height: auto; display: block; }
+  .snake-fallback {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--faint);
+    font-size: 14px;
+    padding: 40px 0;
+    text-align: center;
+  }
+  .snake-fallback .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:.3;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
+
+  /* About Me */
+  .about-list { display: flex; flex-direction: column; }
+  .about-row {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--hairline);
+    align-items: baseline;
+  }
+  .about-row:last-child { border-bottom: none; }
+  .about-row dt {
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--faint);
+    font-weight: 600;
+  }
+  .about-row dd { color: var(--ink); font-size: 16px; }
+  .about-row dd a { color: var(--accent); text-decoration: none; }
+  .about-row dd a:hover { text-decoration: underline; }
+
+  /* 页脚 */
+  footer {
+    padding: 56px 0 72px;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  footer .links { display: flex; gap: 24px; flex-wrap: wrap; }
+  footer a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14.5px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 2px;
+    transition: border-color .2s ease;
+  }
+  footer a:hover { border-color: var(--ink); }
+  footer .copy { color: var(--faint); font-size: 13px; }
+
+  /* 入场动画 */
+  .reveal { opacity: 0; transform: translateY(14px); animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  .reveal:nth-child(2){ animation-delay:.06s; }
+  .reveal:nth-child(3){ animation-delay:.12s; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  @media (max-width: 560px) {
+    .hero { padding: 64px 0 48px; }
+    .about-row { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
+    .about-row dt { font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="monogram" aria-label="YuZhou">Y</div>
+      <a href="https://github.com/sljdxde" target="_blank" rel="noopener">GitHub ↗</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow reveal">Full-stack Developer · Hangzhou</p>
+        <h1 class="reveal">我是 <span class="accent">YuZhou</span></h1>
+        <p class="lede reveal">全栈开发者，热爱开源，喜欢用 AI 把重复的工作自动化。</p>
+      </section>
+
+      <section>
+        <p class="section-label">贡献贪吃蛇</p>
+        <div class="snake-card">
+          <img
+            src="https://raw.githubusercontent.com/sljdxde/sljdxde/output/github-contribution-grid-snake.svg"
+            alt="GitHub 贡献贪吃蛇动画"
+            onerror="this.style.display='none';document.getElementById('snakeFallback').style.display='flex';" />
+          <div class="snake-fallback" id="snakeFallback">
+            <span class="dot"></span>
+            <span>贪吃蛇图将在仓库的 GitHub Action 运行后自动生成</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <p class="section-label">About Me</p>
+        <dl class="about-list">
+          <div class="about-row">
+            <dt>正在做</dt>
+            <dd>schrodinger-skills 等开源项目</dd>
+          </div>
+          <div class="about-row">
+            <dt>正在学</dt>
+            <dd>AI Agent 与自动化工作流</dd>
+          </div>
+          <div class="about-row">
+            <dt>擅长</dt>
+            <dd>Python、Node.js、自动化脚本</dd>
+          </div>
+          <div class="about-row">
+            <dt>联系我</dt>
+            <dd><a href="mailto:502460524@qq.com">502460524@qq.com</a></dd>
+          </div>
+          <div class="about-row">
+            <dt>趣闻</dt>
+            <dd>住在 Mac 里的数字小精灵</dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+
+    <footer>
+      <div class="links">
+        <a href="mailto:502460524@qq.com">邮箱</a>
+        <a href="https://github.com/sljdxde" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <span class="copy">© 2026 YuZhou</span>
+    </footer>
+  </div>
+
+  <script>
+    // 内容已全部静态渲染，这里仅做兜底：若贪吃蛇图加载失败，确保占位提示可见。
+    window.addEventListener('load', function () {
+      var img = document.querySelector('.snake-card img');
+      var fb = document.getElementById('snakeFallback');
+      if (img && img.complete && img.naturalWidth === 0 && fb) {
+        img.style.display = 'none';
+        fb.style.display = 'flex';
+      }
+    });
+  </script>
+</body>
+</html>
